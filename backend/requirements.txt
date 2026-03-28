@@ -1,0 +1,8 @@
+Django==6.0.3
+djangorestframework
+django-cors-headers
+djangorestframework-simplejwt
+python-dotenv
+gunicorn
+whitenoise
+waitress

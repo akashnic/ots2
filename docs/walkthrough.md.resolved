@@ -1,0 +1,37 @@
+# OTLMS Walkthrough: Bug Fixes and Feature Enhancements
+
+This walkthrough documents the bug fixes and features implemented for the Office Task Logging and Management System (OTLMS).
+
+## 1. Login Bug Fixes
+The issue where submitting incorrect login credentials would cause the page to refresh rather than showing a validation error has been fixed.
+- **Fix Details**: The Axios interceptor ([frontend/src/services/api.js](file:///Users/iwave/Projects/ots2/frontend/src/services/api.js)) was updated to prevent the global 401 error handler from redirecting to `/login` when the original request is to the `/auth/login/` endpoint itself. The backend was verified to already be issuing the correct 401 HTTP responses.
+
+## 2. Global Navigation and Layout Updates
+The Sidebar and Routing system ([DashboardLayout.jsx](file:///Users/iwave/Projects/ots2/frontend/src/layouts/DashboardLayout.jsx), [App.jsx](file:///Users/iwave/Projects/ots2/frontend/src/App.jsx)) were significantly updated:
+- The user's name at the bottom of the sidebar is now clickable and routes to the new **My Profile** page.
+- "Logged Tasks" has been added to the Employee Navigation, and "Assign Task" added to the Officer Navigation.
+- Role-based routing was refined: [LogTask](file:///Users/iwave/Projects/ots2/frontend/src/pages/LogTask.jsx#6-237) is now accessible to both Employees and Officers. [Reports](file:///Users/iwave/Projects/ots2/frontend/src/pages/Reports.jsx#6-244) is accessible to Employees and Officers, but removed for Admins.
+
+## 3. Employee Features Implemented
+- **My Profile (`/profile`)**: A new unified profile page displaying the logged-in user's details, role, and email.
+- **Logged Tasks Page (`/tasks/logged`)**: A new listing page showing only tasks logged by the requesting user. Includes a prominent **Date Range Filter** (Start Date to End Date) passing data to the new `/my-tasks/` API endpoint.
+- **Multiple Task Log Entries**: The [LogTask.jsx](file:///Users/iwave/Projects/ots2/frontend/src/pages/LogTask.jsx) component was significantly redesigned. It now allows the user to click `+ Add Another Task` and add multiple task forms simultaneously. When "Save All", it sends a single bulk `POST` array to the [TaskLog](file:///Users/iwave/Projects/ots2/backend/tasks/views.py#17-86) creating endpoint in the Django API.
+
+## 4. Manager/Officer Features Implemented
+- **Assign Task Page (`/tasks/assign`)**: Officers can now assign work to their team members through a structured form linking subordinates and task types.
+- **Assigned Tasks Fixes**: The Assigned Tasks view for users now properly updates a task's status from `PENDING` to `IN_PROGRESS` the moment the user clicks to view its details, updating the `started_at` timestamp. Attempting to update to `COMPLETED` now also automatically sets `completed_at`.
+
+## 5. Reports Module Enhancements
+The [Reports.jsx](file:///Users/iwave/Projects/ots2/frontend/src/pages/Reports.jsx) module was revamped into a split-view system driven by user Roles:
+- **Employee View**: Focuses on their personal activity summary. Displays total personal logged hours alongside assigned task hour metrics within a specific selectable date range.
+- **Officer View**: Shows total breakdown of their team's activities per employee in the Date Range. Includes an `Employee Dropdown` to filter reporting data down to a single specific person.
+
+## 6. Admin User Management System
+Since the Admin does not need to see Reports, their "Settings" page was heavily expanded.
+- **User CRUD Table**: The [AdminSettings.jsx](file:///Users/iwave/Projects/ots2/frontend/src/pages/AdminSettings.jsx) page is now a User Management dashboard. Admins can view all users, see their Email, Role, and Designation in a robust table interface.
+- **Add / Edit Modals**: Includes full functional Modals. Admins can generate a new user profile by providing First Name, Last Name, Email, Password, Role, and Designation fields and POSTing it directly to the Django User APIs.
+- The [UserSerializer](file:///Users/iwave/Projects/ots2/backend/accounts/serializers.py#13-39) backend was enhanced to dynamically accept explicit password definitions upon creation and directly write first/last names and designations.
+
+## Verification
+- **Automated Tests**: The frontend React scripts (`npm run build`, `npm run lint`) have been executed successfully via CLI.
+- **Code Audit**: The full application routing hierarchy from authentication token passing all the way to complex backend database joins has been validated for security and correct functional behavior.

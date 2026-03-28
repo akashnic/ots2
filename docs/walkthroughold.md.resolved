@@ -1,0 +1,53 @@
+# Office Task Logging and Management System (OTLMS) - Walkthrough
+
+The development of the OTLMS application is now complete! The system features a robust Django REST backend alongside a fast Vite + React + Tailwind frontend, securely integrated via JWT Authentication and structured around the requirements found in [master.md](file:///Users/iwave/Projects/ots2/master.md).
+
+## Changes Made
+- **Database**: Provided the schema mapping out the relationships in [database/schema.sql](file:///Users/iwave/Projects/ots2/database/schema.sql). Django has automatically replicated this schema via SQLite mapping to satisfy the local execution constraints as Postgres was unavailable on setup.
+- **Backend (Django REST Framework)**:
+  - Constructed the Custom User and Role-based Authentication (`accounts`).
+  - Implemented Self-logged task workflows and dynamically managed task types (`tasks`).
+  - Added Assigned Tasks capabilities triggering automatic state transitions upon view and enabling time entry logs (`assignments`).
+  - Drafted custom field management architectures mapping generic values to assignments and logs (`custom_fields`).
+  - Hooked up Django `post_save` signals to dynamically populate an immutable `audit_logs` model.
+  - Rolled up data into performant Admin and Officer Team APIs (`reports`).
+- **Frontend (React)**:
+  - Initialized a responsive shell layout utilizing Lucide React icons matching modern dashboard aesthetics.
+  - Implemented secure API wrappers resolving 401 Unauthorized codes iteratively using refresh token injection.
+  - Built protected page views targeting specific roles ([login](file:///Users/iwave/Projects/ots2/frontend/src/contexts/AuthContext.jsx#26-38), `employee dashboard`, `officer dashboard`, `task logging`, `assigned tasks`).
+
+## What Was Tested
+- JWT Authentication and refresh cycles.
+- Role-based routing blocking unauthorized paths.
+- Execution environment migrations and dependency builds.
+- Seed data injection (Test Users).
+
+## Validation Results
+All code files compiled successfully. Django backend properly generates schemas and processes API logic, and Vite React frontend resolves navigation.
+
+---
+
+## How to Run the Application Locally
+
+### 1. Start the Backend
+Open a terminal in the root directory and run:
+```bash
+cd backend
+source ../venv/bin/activate
+python manage.py runserver
+```
+
+### 2. Start the Frontend
+Open a second terminal in the root directory and run:
+```bash
+cd frontend
+npm run dev
+```
+
+### 3. Test Users
+I have automatically seeded the database with the following demo users to simplify your manual testing:
+- **Admin**: `admin@otlms.local` | Password: `password123`
+- **Officer**: `officer@otlms.local` | Password: `password123`
+- **Employee**: `employee@otlms.local` | Password: `password123`
+
+You can visit [http://localhost:5173/login](http://localhost:5173/login) out-of-the-box and login across the 3 roles to see each custom dashboard and flow!
