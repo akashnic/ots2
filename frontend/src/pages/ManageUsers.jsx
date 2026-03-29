@@ -16,6 +16,7 @@ const ManageUsers = () => {
         email: '',
         full_name: '',
         role: '',
+        post: '',
         password: '',
         is_active: true
     });
@@ -67,6 +68,7 @@ const ManageUsers = () => {
                 email: user.email,
                 full_name: user.full_name,
                 role: user.role,
+                post: user.post || '',
                 password: '',
                 is_active: user.is_active
             });
@@ -76,6 +78,7 @@ const ManageUsers = () => {
                 email: '',
                 full_name: '',
                 role: roles[0]?.id || '',
+                post: '',
                 password: '',
                 is_active: true
             });
@@ -164,6 +167,7 @@ const ManageUsers = () => {
                                 <thead className="bg-gray-50">
                                     <tr>
                                         <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Post / Designation</th>
                                         <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role & Status</th>
                                         <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
                                     </tr>
@@ -183,6 +187,9 @@ const ManageUsers = () => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-sm font-medium text-gray-700">{user.post || '---'}</div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center space-x-3">
@@ -281,6 +288,21 @@ const ManageUsers = () => {
                                             value={form.email}
                                             onChange={(e) => setForm({ ...form, email: e.target.value })}
                                             placeholder="username@org.gov"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">Professional Post / Designation</label>
+                                    <div className="relative">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <Shield size={18} />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 outline-none transition"
+                                            value={form.post}
+                                            onChange={(e) => setForm({ ...form, post: e.target.value })}
+                                            placeholder="e.g. Senior Section Officer"
                                         />
                                     </div>
                                 </div>

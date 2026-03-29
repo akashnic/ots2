@@ -38,7 +38,7 @@ const DashboardLayout = () => {
                 <div className="p-4 border-t">
                     <div className="mb-4">
                         <p className="text-sm font-semibold text-gray-800">{user.full_name}</p>
-                        <p className="text-xs text-gray-500">{user.role}</p>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">{user.post || user.role}</p>
                     </div>
                     <button
                         onClick={logout}

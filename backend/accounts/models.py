@@ -44,6 +44,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=255)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
+    post = models.CharField(max_length=255, blank=True, null=True) # Designation / Post
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name']

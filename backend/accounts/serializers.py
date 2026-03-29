@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'full_name', 'role', 'role_details', 'is_active', 'password']
+        fields = ['id', 'email', 'full_name', 'role', 'role_details', 'post', 'is_active', 'password']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -46,6 +46,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         token['full_name'] = user.full_name
         token['role'] = user.role.name if getattr(user, 'role', None) else None
+        token['post'] = user.post
 
         return token
 
@@ -58,6 +59,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'id': user.id,
             'email': user.email,
             'full_name': user.full_name,
-            'role': getattr(user.role, 'name', None)
+            'role': getattr(user.role, 'name', None),
+            'post': user.post
         }
         return data
