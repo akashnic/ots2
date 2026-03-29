@@ -68,6 +68,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
+# Directory where Vite builds the frontend
+FRONTEND_DIR = BASE_DIR.parent / 'frontend' / 'dist'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -133,9 +136,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Directory where Vite builds the frontend
-FRONTEND_DIR = BASE_DIR.parent / 'frontend' / 'dist'
 
 STATICFILES_DIRS = [
     FRONTEND_DIR,
