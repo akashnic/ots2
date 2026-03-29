@@ -5,7 +5,6 @@ import { Users, Search, Plus, Calendar, Clock, FileText, CheckCircle, AlertCircl
 
 const VisitorLog = () => {
     const { user } = useAuth();
-    const [departments, setDepartments] = useState([]);
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -24,12 +23,8 @@ const VisitorLog = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [deptRes, logRes] = await Promise.all([
-                api.get('visitors/departments/'),
-                api.get('visitors/logs/')
-            ]);
-            setDepartments(deptRes.data.results || deptRes.data);
-            setLogs(logRes.data.results || logRes.data);
+            const res = await api.get('visitors/logs/');
+            setLogs(res.data.results || res.data);
         } catch (err) {
             console.error("Failed to load visitor data", err);
             setStatus({ type: 'error', message: 'Failed to load data. Please try again.' });
@@ -65,7 +60,7 @@ const VisitorLog = () => {
 
     const filteredLogs = logs.filter(log => 
         log.visitor_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        log.department_details?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        log.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
         log.query.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -120,18 +115,15 @@ const VisitorLog = () => {
 
                         <div className="sm:col-span-2">
                             <label className="block text-sm font-medium text-gray-700">Department</label>
-                            <select
+                            <input
+                                type="text"
                                 name="department"
                                 required
                                 value={formData.department}
                                 onChange={handleChange}
                                 className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md py-2 border px-3"
-                            >
-                                <option value="" disabled>Select Department</option>
-                                {departments.map(dept => (
-                                    <option key={dept.id} value={dept.id}>{dept.name}</option>
-                                ))}
-                            </select>
+                                placeholder="E.g. IT, HR, Finance"
+                            />
                         </div>
 
                         <div className="sm:col-span-6">
@@ -207,7 +199,7 @@ const VisitorLog = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
-                                                {log.department_details?.name}
+                                                {log.department}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">

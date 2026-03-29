@@ -1,13 +1,8 @@
 from django.contrib import admin
-from .models import Department, VisitorLog
-
-@admin.register(Department)
-class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
-    search_fields = ('name',)
+from .models import VisitorLog
 
 @admin.register(VisitorLog)
 class VisitorLogAdmin(admin.ModelAdmin):
     list_display = ('visitor_name', 'department', 'logged_by', 'created_at')
-    list_filter = ('department', 'logged_by', 'created_at')
-    search_fields = ('visitor_name', 'query')
+    list_filter = ('logged_by', 'created_at')
+    search_fields = ('visitor_name', 'department', 'query')
